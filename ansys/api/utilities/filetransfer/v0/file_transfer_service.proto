@@ -1,0 +1,226 @@
+//
+// Copyright 2022 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
+//
+
+// syntax
+syntax = "proto3";
+
+// options
+option optimize_for = SPEED;
+option cc_enable_arenas = true;
+
+// package
+package ansys.api.meshing.filetransfer.v1;
+
+//
+// The result response data.
+//
+message Result {
+
+    // Flag whether the API call succeeded or not.
+    bool ok = 1;
+
+    // The status code of the result.
+    int64 status_code = 2;
+
+    // The message associated with the result.
+    string message = 3;
+}
+
+//
+// The request data sent for querying the progress.
+//
+message ProgressRequest {
+
+    // Flag whether to interrupt the operation or not.
+    bool interrupt = 1;
+}
+
+//
+// The response data returned for reporting the progress.
+//
+message ProgressResponse {
+
+    // The integer value within [0, 100] indicating the current progress state.
+    int32 state = 1;
+
+    // The message associated with the progress.
+    string message = 2;
+}
+
+//
+// SHA-1
+//
+message SHA1 {
+
+    // The SHA-1 hash value rendered as a hexadecimal number (40 digits long).
+    bytes hex_digest = 1;
+}
+
+//
+// The meta-data of a file.
+//
+message FileInfo {
+
+    // The file name.
+    string name = 1;
+
+    // The total size of the file in bytes.
+    uint64 size = 2;
+
+    // The SHA-1 message digest (checksum) of the file.
+    SHA1 sha1 = 3;
+}
+
+//
+// The file content split into chunks.
+//
+message FileChunk {
+
+    // The offset of this chunk.
+    uint64 offset = 1;
+
+    // The data.
+    bytes data = 2;
+}
+
+//
+// The request data sent for a 'UploadFile' operation.
+//
+message UploadFileRequest {
+
+    //
+    // The request data sent for initializing a 'UploadFile' operation.
+    //
+    message Initialize {
+
+        // The meta-data about the file.
+        FileInfo file_info = 1;
+    }
+
+    //
+    // The request data sent for sending a chunk of data for a 'UploadFile' operation.
+    //
+    message SendData {
+
+        // The file data.
+        FileChunk file_data = 1;
+    }
+
+    //
+    // The request data sent for finalizing a 'UploadFile' operation.
+    //
+    message Finalize {
+    }
+
+    // The progress request.
+    ProgressRequest progress = 1;
+
+    // The sub-step of the 'UploadFile' operation to be executed.
+    oneof sub_step {
+
+        // Step 1 (once): Initializes the 'UploadFile' operation.
+        Initialize initialize = 2;
+
+        // Step 2 (#>1): Sends the file data (need to be called multiple times until all data are sent).
+        SendData send_data = 3;
+
+        // Step 3 (once): Finalizes the 'UploadFile' operation.
+        Finalize finalize = 4;
+    }
+}
+
+//
+// The response data returned from a 'UploadFile' operation.
+//
+message UploadFileResponse {
+
+    // The returned result of the operation.
+    Result result = 1;
+
+    // The progress response
+    ProgressResponse progress = 2;
+}
+
+//
+// The request data sent for a 'DownloadFile' operation.
+//
+message DownloadFileRequest {
+
+    //
+    // The request data sent for initializing a 'DownloadFile' operation.
+    //
+    message Initialize {
+
+        // The name of the file to be used.
+        string filename = 1;
+
+        // The chunk size to be used for receiving the file data.
+        uint32 chunk_size = 2;
+
+        // Flag whether to compute the SHA-1 checksum of the file or not.
+        bool compute_sha1_checksum = 3;
+    }
+
+    //
+    // The request data sent for receiving a chunk of data for a 'DownloadFile' operation.
+    //
+    message ReceiveData {
+    }
+
+    //
+    // The request data sent for finalizing a 'DownloadFile' operation.
+    //
+    message Finalize {
+    }
+
+    // The progress request.
+    ProgressRequest progress = 1;
+
+    // The sub-step of the 'DownloadFile' operation to be executed.
+    oneof sub_step {
+
+        // Step 1 (once): Initializes the 'DownloadFile' operation.
+        Initialize initialize = 2;
+
+        // Step 2 (once): Initiates the receiving of the file data.
+        ReceiveData receive_data = 3;
+
+        // Step 3 (once): Finalizes the 'DownloadFile' operation.
+        Finalize finalize = 4;
+    }
+}
+
+//
+// The response data returned from a 'DownloadFile' operation.
+//
+message DownloadFileResponse {
+
+    // The returned result of the operation.
+    Result result = 1;
+
+    // The progress response
+    ProgressResponse progress = 2;
+
+    // The sub-response when returning the meta-data or the data back (1st the meta-data will be sent, then the data).
+    oneof sub_step {
+
+        // Step 1 (once): The meta-data about the file.
+        FileInfo file_info = 3;
+
+        // Step 2 (#>1): The file data.
+        FileChunk file_data = 4;
+    }
+}
+
+//
+// Ansys API Meshing file transfer-related service interfaces.
+//
+service FileTransferService {
+
+    // Downloads a file from the server
+    rpc DownloadFile(stream DownloadFileRequest) returns(stream DownloadFileResponse) {}
+
+    // Uploads a file to the server
+    rpc UploadFile(stream UploadFileRequest) returns(stream UploadFileResponse) {}
+}
