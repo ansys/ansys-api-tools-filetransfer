@@ -31,8 +31,8 @@ jobs:
         run: |
           mkdir tmp
           cd tmp
-          python -c "import {{ cookiecutter._dot_package_name_no_ver }}.v{{ cookiecutter.api_version }}; print('Sucessfully imported {{ cookiecutter._dot_package_name_no_ver }}.v{{ cookiecutter.api_version }}')"
-          python -c "from {{ cookiecutter._dot_package_name_no_ver }}.v{{ cookiecutter.api_version }} import __version__; print(__version__)"
+          python -c "import ansys.api.utilities.filetransfer; print('Sucessfully imported ansys.api.utilities.filetransfer')"
+          python -c "from ansys.api.utilities.filetransfer import __version__; print('Sucessfully imported ansys.api.utilities.filetransfer'); print(__version__)"
       - name: Upload packages
         uses: actions/upload-artifact@v2
         with:
