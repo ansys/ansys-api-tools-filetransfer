@@ -10,7 +10,7 @@ option optimize_for = SPEED;
 option cc_enable_arenas = true;
 
 // package
-package ansys.api.meshing.filetransfer.v1;
+package ansys.api.utilities.filetransfer.v1;
 
 //
 // The result response data.
@@ -214,7 +214,7 @@ message DownloadFileResponse {
 }
 
 //
-// Ansys API Meshing file transfer-related service interfaces.
+// Ansys API utilities file transfer-related service interfaces.
 //
 service FileTransferService {
 
