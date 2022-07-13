@@ -29,8 +29,6 @@ message ProgressResponse {
     // The integer value within [0, 100] indicating the current progress state.
     int32 state = 1;
 
-    // The message associated with the progress.
-    string message = 2;
 }
 
 //
