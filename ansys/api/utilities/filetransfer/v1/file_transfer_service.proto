@@ -37,7 +37,7 @@ message ProgressResponse {
 message SHA1 {
 
     // The SHA-1 hash value rendered as a hexadecimal number (40 digits long).
-    bytes hex_digest = 1;
+    string hex_digest = 1;
 }
 
 //
