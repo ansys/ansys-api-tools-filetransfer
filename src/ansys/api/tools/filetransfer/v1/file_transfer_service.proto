@@ -10,7 +10,7 @@ option optimize_for = SPEED;
 option cc_enable_arenas = true;
 
 // package
-package ansys.api.utilities.filetransfer.v1;
+package ansys.api.tools.filetransfer.v1;
 
 //
 // The request data sent for querying the progress.
@@ -196,7 +196,7 @@ message DownloadFileResponse {
 }
 
 //
-// Ansys API utilities file transfer-related service interfaces.
+// File transfer service interfaces.
 //
 service FileTransferService {
 
