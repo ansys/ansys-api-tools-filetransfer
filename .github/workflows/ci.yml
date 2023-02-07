@@ -31,12 +31,12 @@ jobs:
         run: |
           mkdir tmp
           cd tmp
-          python -c "import ansys.api.utilities.filetransfer; print('Sucessfully imported ansys.api.utilities.filetransfer')"
-          python -c "from ansys.api.utilities.filetransfer import __version__; print('Sucessfully imported ansys.api.utilities.filetransfer'); print(__version__)"
+          python -c "import ansys.api.tools.filetransfer; print('Sucessfully imported ansys.api.tools.filetransfer')"
+          python -c "from ansys.api.tools.filetransfer import __version__; print('Sucessfully imported ansys.api.tools.filetransfer'); print(__version__)"
       - name: Upload packages
         uses: actions/upload-artifact@v2
         with:
-          name: ansys-api-utilities-filetransfer-packages
+          name: ansys-api-tools-filetransfer-packages
           path: dist/
           retention-days: 7
 
@@ -64,7 +64,7 @@ jobs:
       #     twine upload --skip-existing ./**/*.tar.gz
       #   env:
       #     TWINE_USERNAME: __token__
-      #     TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }} 
+      #     TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
 
       - name: Release
         uses: softprops/action-gh-release@v1

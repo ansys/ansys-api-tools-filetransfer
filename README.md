@@ -1,7 +1,7 @@
-### ansys-api-utilities-filetransfer gRPC Interface Package
+### ansys-api-tools-filetransfer gRPC Interface Package
 
 This Python package contains the auto-generated gRPC Python interface files for
-utilities.
+the filetransfer tool.
 
 
 #### Installation
@@ -10,7 +10,7 @@ Provided that these wheels have been published to public PyPI, they can be
 installed with:
 
 ```
-pip install ansys-api-utilities-filetransfer
+pip install ansys-api-tools-filetransfer
 ```
 
 Otherwise, see the

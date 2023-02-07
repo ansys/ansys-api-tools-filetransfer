@@ -9,7 +9,7 @@
 
 # Create library 'file_transfer_api' from .proto file definition
 set(PROTO_FILES
-    ansys/api/utilities/filetransfer/v1/file_transfer_service.proto
+    ansys/api/tools/filetransfer/v1/file_transfer_service.proto
 )
 add_library(file_transfer_api ${PROTO_FILES})
 
