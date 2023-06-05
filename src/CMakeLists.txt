@@ -12,7 +12,7 @@ set(PROTO_FILES
 )
 add_library(file_transfer_api ${PROTO_FILES})
 
-target_link_libraries(file_transfer_api ${gRPC_LIBRARIES} ${PROTOBUF_LIBRARIES})
+target_link_libraries(file_transfer_api PUBLIC ${gRPC_LIBRARIES} ${PROTOBUF_LIBRARIES})
 target_include_directories(file_transfer_api PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
 protobuf_generate(TARGET file_transfer_api LANGUAGE cpp)
