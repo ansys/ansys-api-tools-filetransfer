@@ -8,69 +8,33 @@ on:
       - "*"
     branches:
       - main
+      - maint/publish_to_private_pypi
+
+env:
+  MAIN_PYTHON_VERSION: '3.9'
+  PACKAGE_NAME: 'ansys-api-tools-filetransfer'
 
 jobs:
-  build:
-    name: Build package
+  build-library:
+    name: "Build package"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Python
-        uses: actions/setup-python@v2
+      - name: "Build library source and wheel artifacts"
+        uses: ansys/actions/build-library@v4
         with:
-          python-version: "3.7"
-      - name: Install build requirements
-        run: |
-          pip install -U pip
-          pip install build
-      - name: Build
-        run: python -m build
-      - name: Install
-        run: pip install dist/*.whl
-      - name: Test import
-        run: |
-          mkdir tmp
-          cd tmp
-          python -c "import ansys.api.tools.filetransfer; print('Sucessfully imported ansys.api.tools.filetransfer')"
-          python -c "from ansys.api.tools.filetransfer import __version__; print('Sucessfully imported ansys.api.tools.filetransfer'); print(__version__)"
-      - name: Upload packages
-        uses: actions/upload-artifact@v2
-        with:
-          name: ansys-api-tools-filetransfer-packages
-          path: dist/
-          retention-days: 7
+          library-name: ${{ env.PACKAGE_NAME }}
 
-  Release:
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build]
+  release-pypi-private:
+    name: "Release to private PyPI"
     runs-on: ubuntu-latest
+    needs: [build-library]
+    # if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    if: github.event_name == 'push' && github.ref_type == 'branch' && github.ref == 'refs/heads/maint/publish_to_private_pypi'
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: "Release to the private PyPI repository"
+        uses: ansys/actions/release-pypi-private@fix/conditional-skip-release
         with:
-          python-version: 3.10
-
-      - uses: actions/download-artifact@v2
-
-      - name: Display structure of downloaded files
-        run: ls -R
-
-      # uncomment the following section to permit upload to public PyPI
-
-      # - name: Upload to Public PyPi
-      #   run: |
-      #     pip install twine
-      #     twine upload --skip-existing ./**/*.whl
-      #     twine upload --skip-existing ./**/*.tar.gz
-      #   env:
-      #     TWINE_USERNAME: __token__
-      #     TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          generate_release_notes: true
-          files: |
-            ./**/*.whl
-            ./**/*.tar.gz
-            ./**/*.pdf
+          library-name:  ${{ env.PACKAGE_NAME }}
+          twine-username: "__token__"
+          twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
+          skip-existing: false
