@@ -24,6 +24,27 @@ jobs:
         with:
           library-name: ${{ env.PACKAGE_NAME }}
 
+  check-version:
+    name: "Check version is bumped"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main'
+    steps:
+      - name: "Check out repository"
+        uses: actions/checkout@v2
+      - name: "Check version is changed"
+        run: |
+          git fetch origin $BASE_BRANCH
+
+          NUM_CHARS=$(git diff --ignore-all-space origin/$BASE_BRANCH -- src/ansys/api/tools/filetransfer/VERSION | wc -c)
+
+          if [ $NUM_CHARS -eq 0 ]; then
+            echo "Version is not bumped.  Please update the version in src/ansys/api/tools/filetransfer/VERSION"
+            exit 1
+          fi
+        env:
+          BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+
+
   release-pypi-private:
     name: "Release to private PyPI"
     runs-on: ubuntu-latest
@@ -37,4 +58,3 @@ jobs:
           library-name:  ${{ env.PACKAGE_NAME }}
           twine-username: "__token__"
           twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
-          skip-existing: false
