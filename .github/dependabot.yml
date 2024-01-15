@@ -1,0 +1,12 @@
+version: 2
+updates:
+  # TODO: Check if this behaves as needed.
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    versioning-strategy: "increase"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
