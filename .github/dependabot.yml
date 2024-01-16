@@ -1,6 +1,5 @@
 version: 2
 updates:
-  # TODO: Check if this behaves as needed.
   - package-ecosystem: "pip"
     directory: "/"
     schedule:

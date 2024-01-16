@@ -13,9 +13,6 @@ installed with:
 pip install ansys-api-tools-filetransfer
 ```
 
-Otherwise, see the
-
-
 #### Build
 
 To build the gRPC packages, run:
