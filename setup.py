@@ -29,7 +29,7 @@ if __name__ == "__main__":
         name=package_name,
         version=version,
         author="ANSYS, Inc.",
-        author_email="support@ansys.com",
+        author_email="pyansys.core@ansys.com",
         description=description,
         long_description=long_description,
         long_description_content_type="text/markdown",
@@ -48,4 +48,9 @@ if __name__ == "__main__":
             ],
         },
         cmdclass=CMDCLASS_OVERRIDE,
+        project_urls={
+            "Documentation": f"https://github.com/ansys-internal/{package_name}/#readme",
+            "Source": f"https://github.com/ansys-internal/{package_name}/",
+            "Tracker": f"https://github.com/ansys-internal/{package_name}/issues/",
+        },
     )
