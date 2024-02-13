@@ -33,7 +33,7 @@ if __name__ == "__main__":
         description=description,
         long_description=long_description,
         long_description_content_type="text/markdown",
-        url=f"https://github.com/ansys-internal/{package_name}",
+        url=f"https://github.com/ansys/{package_name}",
         license="MIT",
         python_requires=">=3.7",
         install_requires=["grpcio~=1.17", "protobuf>=3.19,<5"],
@@ -49,8 +49,8 @@ if __name__ == "__main__":
         },
         cmdclass=CMDCLASS_OVERRIDE,
         project_urls={
-            "Documentation": f"https://github.com/ansys-internal/{package_name}/#readme",
-            "Source": f"https://github.com/ansys-internal/{package_name}/",
-            "Tracker": f"https://github.com/ansys-internal/{package_name}/issues/",
+            "Documentation": f"https://github.com/ansys/{package_name}/#readme",
+            "Source": f"https://github.com/ansys/{package_name}/",
+            "Tracker": f"https://github.com/ansys/{package_name}/issues/",
         },
     )
