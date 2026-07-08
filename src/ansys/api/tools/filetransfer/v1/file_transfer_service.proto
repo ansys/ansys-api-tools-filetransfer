@@ -214,6 +214,44 @@ message DownloadFileResponse {
 }
 
 //
+// The request data sent for a 'DeleteFile' operation.
+//
+message DeleteFileRequest {
+
+    // The name of the file to be deleted.
+    string filename = 1;
+}
+
+//
+// The response data returned from a 'DeleteFile' operation.
+//
+message DeleteFileResponse {
+    // empty
+}
+
+//
+// The request data sent for a 'GetFileInfo' operation.
+//
+message GetFileInfoRequest {
+
+    // The name of the file to get the information about.
+    string filename = 1;
+    bool compute_sha1_checksum = 2;
+}
+
+//
+// The response data returned from a 'GetFileInfo' operation.
+//
+message GetFileInfoResponse {
+
+    // Flag whether the file exists or not.
+    bool exists = 1;
+
+    // The meta-data about the file.
+    FileInfo file_info = 2;
+}
+
+//
 // File transfer service interfaces.
 //
 service FileTransferService {
@@ -223,4 +261,10 @@ service FileTransferService {
 
     // Uploads a file to the server
     rpc UploadFile(stream UploadFileRequest) returns(stream UploadFileResponse) {}
+
+    // Deletes a file on the server
+    rpc DeleteFile(DeleteFileRequest) returns (DeleteFileResponse) {}
+
+    // Gets the file information
+    rpc GetFileInfo(GetFileInfoRequest) returns (GetFileInfoResponse) {}
 }
